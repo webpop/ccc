@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Contextual CodeMirror Completion</title>
+    <link rel="stylesheet" href="../vendor/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../css/code-completion.css">    
+  </head>
+  <body>
+    <header>
+      <h1>Contextual CodeMirror Completion</h1>
+    </header>
+    <div class="main">
+      <section class="html">
+        <h2>HTML Completion</h2>
+        <div id="html" class="editor"></div>
+      </section>
+
+      <script id="html-source" type="text/html">
+<h1>This is an example of contextual HTML completion</h1>
+<p>
+    Type tags to try.
+    Forms currently has the most going for them:
+</p>
+<form>
+
+</form>
+      </script>
+    
+      <section class="css">
+        <h2>CSS Completion</h2>
+        <div id="css" class="editor"></div>
+      </section>
+      
+
+      <script id="css-source" type="text/css">
+/*
+ * CSS Completions
+ * Try adding a font-family rule to the selector:
+ */
+body {
+
+}
+      </script>      
+
+    </div>
+    <footer>
+      Made by the <a href="http://www.webpop.com">Webpop</a> team.
+    </footer>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="../vendor/codemirror/lib/codemirror.js"></script>
+    <script src="../vendor/codemirror/mode/javascript/javascript.js"></script>
+    <script src="../vendor/codemirror/mode/xml/xml.js"></script>
+    <script src="../vendor/codemirror/mode/css/css.js"></script>
+    <script src="../javascripts/mode/poptags/poptags.js"></script>
+    <script src="../javascripts/mode/pophtmlmixed/pophtmlmixed.js"></script>
+    
+    <script src="../javascripts/code-completion.js"></script>
+    <script src="../javascripts/css-completion.js"></script>
+    <script src="../javascripts/html-completion.js"></script>
+    <script>
+      var htmlEl = document.getElementById("html"),
+          cssEl  = document.getElementById("css"),
+          html   = document.getElementById("html-source").innerHTML,
+          css    = document.getElementById("css-source").innerHTML;
+
+      var htmlEditor = CodeMirror(htmlEl, {
+        value: html,
+        mode: "pophtmlmixed"
+      });
+      
+      var htmlCompletion = new CodeCompletion(htmlEditor, new HtmlCompletion());
+      htmlEditor.setOption("onKeyEvent", function(cm, e) {
+          return htmlCompletion.handleKeyEvent(cm, e);
+      });
+
+      var cssEditor = CodeMirror(cssEl, {
+        value: css,
+        mode: "css"
+      });
+      var cssCompletion = new CodeCompletion(cssEditor, new CssCompletion());
+      cssEditor.setOption("onKeyEvent", function(cm, e) {
+          return cssCompletion.handleKeyEvent(cm, e);
+      });
+    </script>
+  </body>
+</html>
