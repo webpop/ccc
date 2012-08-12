@@ -81,6 +81,9 @@ lookup = (obj, prefix, callback) ->
     if callback then callback(key) else key
 
 class window.HtmlCompletion
+  constructor: ->
+    @cssCompletion ||= new CssCompletion({local: true})
+
   hasHints: (editor) -> 
     cursor = editor.getCursor()
     token  = editor.getTokenAt(cursor)
@@ -152,7 +155,9 @@ class window.HtmlCompletion
     editor.replaceRange("#{selected}=\"\"", from, to)
     cursor = editor.getCursor()
     editor.setCursor(cursor.line, cursor.ch - 1)
-    
+
+  insertRule: (editor, selected) ->
+    @cssCompletion.insertRule(editor, selected)
   
   getAttributeValueCompletions: (token, editor, cursor) ->
     tagName = token.state.htmlState.tagName
@@ -213,8 +218,7 @@ class window.HtmlCompletion
           to:   {line: cursor.line, ch: token.end}
         }
       when "css"
-        @cssParser ||= new CssCompletion({local: true})
-        @cssParser.getHints(editor)
+        @cssCompletion.getHints(editor)
   
   autoAttribute: (editor, event) ->
     cursor = editor.getCursor()

@@ -151,7 +151,11 @@
 
   window.HtmlCompletion = (function() {
 
-    function HtmlCompletion() {}
+    function HtmlCompletion() {
+      this.cssCompletion || (this.cssCompletion = new CssCompletion({
+        local: true
+      }));
+    }
 
     HtmlCompletion.prototype.hasHints = function(editor) {
       var cursor, token;
@@ -285,6 +289,10 @@
       return editor.setCursor(cursor.line, cursor.ch - 1);
     };
 
+    HtmlCompletion.prototype.insertRule = function(editor, selected) {
+      return this.cssCompletion.insertRule(editor, selected);
+    };
+
     HtmlCompletion.prototype.getAttributeValueCompletions = function(token, editor, cursor) {
       var attr, attrToken, list, string, tag, tagName, _j, _len1, _results;
       tagName = token.state.htmlState.tagName;
@@ -384,10 +392,7 @@
             }
           };
         case "css":
-          this.cssParser || (this.cssParser = new CssCompletion({
-            local: true
-          }));
-          return this.cssParser.getHints(editor);
+          return this.cssCompletion.getHints(editor);
       }
     };
 

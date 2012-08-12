@@ -197,7 +197,7 @@ class window.CssCompletion
 
   getCompletions: (token, editor, cursor) ->
     stack = if @isLocal then token.state.localState.stack else token.state.stack
-    if (token.state.stack.length == 0 && token.string == ":") || token.className == "tag"
+    if (stack.length == 0 && token.string == ":") || token.className == "tag"
       @getPseudoSelectorCompletions(token, editor, cursor)
     else if token.className == "variable"
      @getRuleCompletions(token, editor, cursor)

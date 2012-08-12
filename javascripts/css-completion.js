@@ -370,7 +370,7 @@
     CssCompletion.prototype.getCompletions = function(token, editor, cursor) {
       var stack;
       stack = this.isLocal ? token.state.localState.stack : token.state.stack;
-      if ((token.state.stack.length === 0 && token.string === ":") || token.className === "tag") {
+      if ((stack.length === 0 && token.string === ":") || token.className === "tag") {
         return this.getPseudoSelectorCompletions(token, editor, cursor);
       } else if (token.className === "variable") {
         return this.getRuleCompletions(token, editor, cursor);
